@@ -1,10 +1,10 @@
-<!DOCTYPE html><html lang="CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>C结构体中定义长度为0的数组的意义 | 高阶近似的Blogger</title><meta name="author" content="Zhenqi Li"><meta name="copyright" content="Zhenqi Li"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="背景写这篇博客的起因是在B站看到了一个视频，于是突然想起我之前写的一个动态内存分配器中也使用了类似的方法，于是写篇博客记录一下。 在动态内存分配器中定义了如下的一个结构体： typedef uint64_t sf_header; typedef sf_header sf_footer; &#x2F;*  * Structure of a block.  * The first field of this s">
+<!DOCTYPE html><html lang="zh-cn" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>C结构体中定义长度为0的数组的意义 | 高阶近似的Blogger</title><meta name="author" content="Zhenqi Li"><meta name="copyright" content="Zhenqi Li"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="背景写这篇博客的起因是在B站看到了一个视频，于是突然想起我之前写的一个动态内存分配器中也使用了类似的方法，于是写篇博客记录一下。 在动态内存分配器中定义了如下的一个结构体： 12345678910111213141516171819typedef uint64_t sf_header;typedef sf_header sf_footer;&#x2F;* * Structure of a block. *">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C结构体中定义长度为0的数组的意义">
 <meta property="og:url" content="https://high-order.github.io/2022/07/18/C%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD%E5%AE%9A%E4%B9%89%E9%95%BF%E5%BA%A6%E4%B8%BA0%E7%9A%84%E6%95%B0%E7%BB%84%E7%9A%84%E6%84%8F%E4%B9%89/index.html">
 <meta property="og:site_name" content="高阶近似的Blogger">
-<meta property="og:description" content="背景写这篇博客的起因是在B站看到了一个视频，于是突然想起我之前写的一个动态内存分配器中也使用了类似的方法，于是写篇博客记录一下。 在动态内存分配器中定义了如下的一个结构体： typedef uint64_t sf_header; typedef sf_header sf_footer; &#x2F;*  * Structure of a block.  * The first field of this s">
-<meta property="og:locale">
+<meta property="og:description" content="背景写这篇博客的起因是在B站看到了一个视频，于是突然想起我之前写的一个动态内存分配器中也使用了类似的方法，于是写篇博客记录一下。 在动态内存分配器中定义了如下的一个结构体： 12345678910111213141516171819typedef uint64_t sf_header;typedef sf_header sf_footer;&#x2F;* * Structure of a block. *">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
 <meta property="article:published_time" content="2022-07-18T04:22:36.295Z">
 <meta property="article:modified_time" content="2022-07-18T04:22:36.295Z">
@@ -16,7 +16,7 @@
   localSearch: undefined,
   translate: undefined,
   noticeOutdate: undefined,
-  highlight: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
   copy: {
     success: 'Copy successfully',
     error: 'Copy error',
@@ -143,36 +143,12 @@
     detectApple()
     })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">高阶近似的Blogger</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C结构体中定义长度为0的数组的意义</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-07-18T04:22:36.295Z" title="Created 2022-07-18 12:22:36">2022-07-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-07-18T04:22:36.295Z" title="Updated 2022-07-18 12:22:36">2022-07-18</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C结构体中定义长度为0的数组的意义"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>写这篇博客的起因是在B站看到了一个<a target="_blank" rel="noopener" href="https://b23.tv/YP6Rkfw">视频</a>，于是突然想起我之前写的一个动态内存分配器中也使用了类似的方法，于是写篇博客记录一下。</p>
 <p>在动态内存分配器中定义了如下的一个结构体：</p>
-<pre><code class="c">typedef uint64_t sf_header;
-typedef sf_header sf_footer;
-/*
- * Structure of a block.
- * The first field of this structure is actually the footer of the *previous* block.
- */
-typedef struct sf_block &#123;
-    sf_footer prev_footer;  // NOTE: This actually belongs to the *previous* block.
-    sf_header header;       // This is where the current block really starts.
-    union &#123;
-        /* A free block contains links to other blocks in a free list. */
-        struct &#123;
-            struct sf_block *next;
-            struct sf_block *prev;
-        &#125; links;
-        /* An allocated block contains a payload (aligned), starting here. */
-        char payload[0];   // Length varies according to block size.
-    &#125; body;
-&#125; sf_block;
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">uint64_t</span> sf_header;</span><br><span class="line"><span class="keyword">typedef</span> sf_header sf_footer;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Structure of a block.</span></span><br><span class="line"><span class="comment"> * The first field of this structure is actually the footer of the *previous* block.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">sf_block</span> &#123;</span></span><br><span class="line">    sf_footer prev_footer;  <span class="comment">// <span class="doctag">NOTE:</span> This actually belongs to the *previous* block.</span></span><br><span class="line">    sf_header header;       <span class="comment">// This is where the current block really starts.</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="comment">/* A free block contains links to other blocks in a free list. */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">sf_block</span> *<span class="title">next</span>;</span></span><br><span class="line">            <span class="class"><span class="keyword">struct</span> <span class="title">sf_block</span> *<span class="title">prev</span>;</span></span><br><span class="line">        &#125; links;</span><br><span class="line">        <span class="comment">/* An allocated block contains a payload (aligned), starting here. */</span></span><br><span class="line">        <span class="type">char</span> payload[<span class="number">0</span>];   <span class="comment">// Length varies according to block size.</span></span><br><span class="line">    &#125; body;</span><br><span class="line">&#125; sf_block;</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，在结构体 <code>sf_block</code> 中定义了一个联合体 <code>body</code>，之所以要定义为联合体而不是直接定义为 <code>char payload[0];</code>，是因为该动态内存分配器需要支持显式空闲链表（双向链表）来提升性能。问题是，联合体 <code>body</code> 中为什么要定义一个长度为0的数组呢？</p>
 <h1 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h1><p>在实际使用中，动态内存分配器中块的大小是未知的，而结构体类型在定义后它的大小就确定了，为了能够使用结构体类型来描述这种大小未知的块，可以在结构体中定义一个长度为0的数组，为了进一步说明，看一个例子。</p>
-<pre><code class="c">// 申请大小为1024个字节的动态内存，注意这个大小是指块中的负载大小，而不包括头部和脚部
-sf_block* blk = (sf_block*) sbrk(sizeof(sf_footer) + sizeof(sf_header) + 1024);
-// 访问这1024个字节
-// blk-&gt;body.payload[0]，访问第一个字节
-// blk-&gt;body.payload[1]，访问第二个字节
-// blk-&gt;body.payload[2]，访问第三个字节
-// 负载的首地址为 blk-&gt;body.payload 或者 &amp;blk-&gt;body
-</code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 申请大小为1024个字节的动态内存，注意这个大小是指块中的负载大小，而不包括头部和脚部</span></span><br><span class="line">sf_block* blk = (sf_block*) sbrk(<span class="keyword">sizeof</span>(sf_footer) + <span class="keyword">sizeof</span>(sf_header) + <span class="number">1024</span>);</span><br><span class="line"><span class="comment">// 访问这1024个字节</span></span><br><span class="line"><span class="comment">// blk-&gt;body.payload[0]，访问第一个字节</span></span><br><span class="line"><span class="comment">// blk-&gt;body.payload[1]，访问第二个字节</span></span><br><span class="line"><span class="comment">// blk-&gt;body.payload[2]，访问第三个字节</span></span><br><span class="line"><span class="comment">// 负载的首地址为 blk-&gt;body.payload 或者 &amp;blk-&gt;body</span></span><br></pre></td></tr></table></figure>
+
 <p>那为什么要使用 <code>char payload[0];</code>，而不是直接在结构体中定义一个 <code>payload</code> 的指针呢？使用 <code>char payload[0];</code>至少有以下三点好处</p>
 <ol>
 <li>省了一个指针的内存占用（在我的例子中由于需要支持显式空闲链表而并没有体现这个好处）</li>
